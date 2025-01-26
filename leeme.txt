@@ -1,0 +1,149 @@
+Curso completo de NEST JS: API REST con MySQL, TypeORM, TypeScript
+https://www.youtube.com/watch?v=RWUmlsdZ1e4&list=PLPl81lqbj-4LqA6sXRETXUg4uNkYG4aUc
+Documentación
+https://bluuweb.dev/nestjs/crud-mysql.html
+
+Flujo del cliente:
+CLIENTE  -- Login ------------------------------->>   SERVIDOR
+{  email: xxxx@xxx.com, pass: 1234 }
+CLIENTE  <<------Token JWT(role, email) -----------   SERVIDOR
+
+Una vez que recibo el Token ya se puede acceder a las 
+rutas protegidas:
+CLIENTE  --------Token JWT(role, email)---------->>   SERVIDOR  (ruta protegida)
+CLIENTE  <<-------Resultado------------------------   SERVIDOR
+
+
+
+1 - Cree una carpeta de proyecto "C:\Users\roger\workspace\crud-mysql"
+2 - Fui a esa carpeta de proyecto desde la terminal y pulse code. para que me cargara esa carpeta en visual studio code
+3 - Crear el archivo de configuracion docker-compose.yml, para poner la configuración del docker donde va a estar la base de datos de Mysql
+4 - Ejecutar el comando: docker compose up -d; para levantar el docker, el -d es para que se ejecute en segundo plano
+5 - Instalar el programa "TablePlus", es como un "phpmyadmin", para ver las base de datos, un visor de base de datos
+6 - Installar el CLI de nest desde la terminal de comandos: npm i -g @nestjs/cli ; con -g es de manera Global, i cli es la interface de la linea de comando, con el comando "nest info" o "nest --version" podemos ver la versión instalada.
+7 - Installar yarn desde la terminal de comandos: npm install --global yarn
+8 - Crear nuestro primer proyecto en nest: nest new ., el punto es para que se cree dentro de la propia carpeta
+9 - Crear nuestro primer recurso en nest: nest g res cats;  nest --global resources nombredelProyecto
+10 - Comentar(quitar la linea) en el archivo .eslintrc.js, linea 11 //'plugin:prettier/recommended', para que no me salgan warning de tipeado mientras se escribe el código
+11 - Instalo las dependecias para la transformación y validación de datos de entrada que está enviando el cliente: yarn add class-validator class-transformer -SE
+12 - Hacer unas validaciones en el archivo main.ts, adicionando las lineas app.setGlobalPrefix("api/v1") ...
+13 - Levanto el servidor para probar el api con el comando: yarn start:dev 
+14 - Probamos las url desde un client url ejemlo: Metodo GET http://localhost:3000/api/v1/cats
+15 - Ahora desde el archivo services nos podemos comunicar con la base de datos, y devolver una colección de gatos..
+16 - Para trabajar con base de datos tenemos que usar el archivo .entity que estable las tablas y las columnas de nuestra base de datos..
+17 - Instalar los paquetes o dependencias de typeorm: 
+para usar el yarn
+			Me paro en la carpeta del directorio de la aplicación y ejecuto
+			yarn add @nestjs/typeorm typeorm mysql2
+		para usar el nmp
+			Me paro en la carpeta del directorio de la aplicación y ejecuto
+			npm install --save @nestjs/typeorm typeorm mysql2
+Este paquete nos permite el trabajo de base de datos con mysql.
+
+Este paquete lo instalamos para el tema de los Dto, cuando quiero heredar un Dto de otro extendiendo de PartialType, esto está en el archivo "update-cat.dto.ts"
+este Dto lo vamos a heredear de CreateCatDto
+// export class UpdateCatDto extends PartialType (CreateCatDto)
+yarn add @nestjs/mapped-types -SE
+
+18 - Para conectarnos a la base de datos desde nuestra api nest debemos hacerlo adicionando en app.module el TypeOrmModule.forRoot, y los datos de conexión a nuestra base de datos ...
+19 - Creo otro recurso (Otra tabla en la base de datos): nest g res breeds --no-spec
+
+Curso completo de NEST JS: Autenticación (Login y Register)
+https://bluuweb.dev/nestjs/auth-jwt.html
+https://www.youtube.com/watch?v=Z6G7mCAeXoE&list=PLPl81lqbj-4LqA6sXRETXUg4uNkYG4aUc&index=2
+20 - Lo primero es crear el recurso (resource) usuario: nest g res users --no-spec
+
+21 - Ahora creamos el módulo, el controlador y el servicio de Auth
+Este módulo solo se va a encargar del login y el registro, 
+no va a trabajar con la base de datos...
+El Auth solo se va a encargar del login y el registo
+nest g module auth
+nest g controller auth --no-spec
+nest g service auth --no-spec
+
+22 - Ahora, despues de registrar un usuario en la base de datos vamos a ver como hashear (encriptar) la contraseña
+para que no se vea en la base de datos como texto plano..
+Para ellos vamos a utilizar las siguientes dependencias...
+yarn add bcryptjs -SE   // el -SE es para que haga una instalación exacta, s de silent por consola
+
+23 - Después de hacer el registro y el login, ahora el login tiene que devolverme un token
+nest ya viene con un módulo y un servicio para trabajar con (yeison_web_Token) (JWT token), para lo cual
+hay que instalar el servicio:
+https://bluuweb.dev/nestjs/auth-jwt.html
+
+Este servicio nos va a servir tanto para devolver los JWT token como para 
+verificar que los token son los correctos.
+yarn add @nestjs/jwt -SE  // el -SE es para que haga una instalación exacta, s de silent por consola
+
+Esta es una plataforma para ver el contenido de un token, que está encriptado
+https://jwt.io/
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+Con este token el usuario tiene que enviar este token cada vez que quiera acceder a 
+una ruta que necesite autorización...
+Autenticar, significa que el usuario y ese password sea correcta y le devolvemos un token
+Autorizar, significa que cuando queremos visitar una ruta que sea con privilegios, 
+el usuario con ese token está autorizado a entrar en esa ruta.
+
+24 - Ahora hacemos la parte de Guard, y lo ponemos dentro de una carpeta guard: 
+nest g guard auth --no-spec
+
+25 - Ahora vamos a implementar los Roles y las autorizaciones
+Curso completo de NEST JS: Autorización (Roles) - Primera parte
+https://www.youtube.com/watch?v=TZ4P0DEfuys&list=PLPl81lqbj-4LqA6sXRETXUg4uNkYG4aUc&index=4
+
+26 - Adiciono un metadata al request para después poder compararlo con la información del usuario
+
+27 - Me creo una Guard personalizado para leer la metadata y compararla con la información del usuario
+nest g guard auth/guard/roles --flat
+
+28- Ahora vamos a hacer la relación y rutas protegidas de lo cats...
+https://www.youtube.com/watch?v=D6_dhpzPOvU&list=PLPl81lqbj-4LqA6sXRETXUg4uNkYG4aUc&index=5
+https://bluuweb.dev/nestjs/guard.html
+
+29 - Ahora lo interesante es que cuando se cree una cat se relacione en la base de datos
+con un usuario.
+https://www.youtube.com/watch?v=D6_dhpzPOvU&list=PLPl81lqbj-4LqA6sXRETXUg4uNkYG4aUc&index=5
+minutos 41:00
+
+30 - Para llevar nuestro proyecto a producción
+Curso completo de NEST JS: Deploy en Render con Postgres 
+https://www.youtube.com/watch?v=H1dhlz7zAuo&list=PLPl81lqbj-4LqA6sXRETXUg4uNkYG4aUc&index=6
+
+31 - Instalar un paquete para ayudar a crear las variables de entorno
+del proyecto:
+yarn add @nestjs/config
+ahora crear una archivo .env en la carpeta raiz del proyecto
+
+32 - Cambiar partes del proyecto para que la palabra secreta se pueda tomar desde las variables
+de entorno, archivo .env, y no desde una constante global que hemos tenido que crear..
+
+33 - Documentar mi API web, Documentar tu API REST - Swagger y Nest.js
+https://www.youtube.com/watch?v=Gct2IXPicoU&list=PLPl81lqbj-4LqA6sXRETXUg4uNkYG4aUc&index=7
+Para esto hacemos un 
+yarn add @nestjs/swagger -SE
+
+LLamar a:
+http://localhost:3000/docs
+
+
+
+
+Visual Studio Code
+ALT + click Izq del raton, para poder editar varias lineas a la misma vez
+Ctrl + Shift + P -> Reload Windows para Reiniciar Visual studio Code
+Ctrl + i -> para insertar las dependencias
+
+Visual studio code "Extensiones"
+Docker
+Material Icon Theme
+Dev Containers
+ES7+ React/Redux/React-Native snippets
+ESLint
+PHP Namespace Resolver
+Prettier - Code formatter
+Simple React snippets
+Thunder client
+WSL
