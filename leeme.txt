@@ -135,6 +135,9 @@ Visual Studio Code
 ALT + click Izq del raton, para poder editar varias lineas a la misma vez
 Ctrl + Shift + P -> Reload Windows para Reiniciar Visual studio Code
 Ctrl + i -> para insertar las dependencias
+Ctrl + d -> una vez seleccionadas me permite la multiple edición
+
+anf - crea una función de flecha
 
 Visual studio code "Extensiones"
 Docker
@@ -147,3 +150,4 @@ Prettier - Code formatter
 Simple React snippets
 Thunder client
 WSL
+GitHub Copilot
