@@ -111,6 +111,8 @@ minutos 41:00
 30 - Para llevar nuestro proyecto a producción
 Curso completo de NEST JS: Deploy en Render con Postgres 
 https://www.youtube.com/watch?v=H1dhlz7zAuo&list=PLPl81lqbj-4LqA6sXRETXUg4uNkYG4aUc&index=6
+
+https://github.com/RogerBatistaCaceres/crud-mysql-nestjs.git
 git add .
 git commit -m "comentario"
 git push
