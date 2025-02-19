@@ -134,8 +134,6 @@ LLamar a:
 http://localhost:3000/docs
 
 
-
-
 Visual Studio Code
 ALT + click Izq del raton, para poder editar varias lineas a la misma vez
 Ctrl + Shift + P -> Reload Windows para Reiniciar Visual studio Code
